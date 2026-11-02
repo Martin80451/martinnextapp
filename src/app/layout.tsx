@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  console.log("Am I on the server or client?");
   return (
     <html
       lang="en"
