@@ -1,4 +1,5 @@
-import {ColorModeToggle} from "./ColorModeToggle";
+import { ColorModeToggle } from "./ColorModeToggle";
+import { ColorModeIcon } from "./ColorModeIcon";
 
 export function Header() {
     console.log("Is Header an RSC?");
@@ -8,7 +9,7 @@ export function Header() {
             <span className="text-lg font-bold">
                 {total}
             </span>
-            <ColorModeToggle />
+            <ColorModeToggle icon={<ColorModeIcon />} />
         </header>
     );
 }

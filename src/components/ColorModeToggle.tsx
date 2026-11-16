@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ColorModeIcon } from "./colorModeIcon";
+import { useState, useEffect, type ReactNode } from "react";
 
-export function ColorModeToggle() {
+export function ColorModeToggle({icon}: {icon: ReactNode}) {
     console.log("Does ColorModeToggle run on the Server and Client?");
         
     const [colorMode, setColorMode] = useState<"dark" | "light">("light");
@@ -47,7 +46,7 @@ export function ColorModeToggle() {
     }
     return (
         <button onClick={handleClick} className="flex rounded bg-blue-500 px-4 py-2 text-white">
-            <ColorModeIcon />
+            {icon}
             {colorMode === 'dark' ? 'Light' : 'Dark'}
         </button>
     );
