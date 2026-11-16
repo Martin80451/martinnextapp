@@ -1,4 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
+import {
+    getAllPosts,
+    getFilteredPosts,
+} from '@/data/queries';
 import { Header } from "@/components/Header";
 
 export default function Home() {
