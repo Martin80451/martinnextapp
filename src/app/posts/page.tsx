@@ -1,11 +1,20 @@
 import { posts } from "@/data/posts";
 import Link from "next/link";
+import { Suspense } from "react";
 
-export default async function Posts({
-  searchParams,
-}: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
+type Props = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function Posts({ searchParams }: { searchParams: Props }) {
+  return (
+    <main>
+      <Suspense fallback={<p>Loading...</p>}>
+        <PostsContent searchParams={searchParams} />
+      </Suspense>
+    </main>
+  );
+}
+
+async function PostsContent({ searchParams }: { searchParams: Props }) {
   const criteria = (await searchParams).criteria;
   const resolvedPosts =
     typeof criteria === "string"
@@ -16,7 +25,7 @@ export default async function Posts({
   const resolvedHeading =
     typeof criteria === "string" ? `Posts for ${criteria}` : "Posts";
   return (
-    <main>
+    <>
       <h2>{resolvedHeading}</h2>
       <ul>
         {resolvedPosts.map((post) => (
@@ -26,6 +35,6 @@ export default async function Posts({
           </li>
         ))}
       </ul>
-    </main>
+    </>
   );
 }

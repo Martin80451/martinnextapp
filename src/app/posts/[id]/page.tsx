@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { getPost } from "@/data/queries";
-import { posts } from "@/data/posts";
 
 export default async function Post({
   params,
