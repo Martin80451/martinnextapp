@@ -1,7 +1,18 @@
 import { posts } from "@/data/posts";
 import Link from "next/link";
 
-export default function Posts() {
+export default async function Posts({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const criteria = (await searchParams).criteria;
+  const resolvedPosts =
+    typeof criteria === "string"
+      ? posts.filter((post) =>
+          post.title.toLowerCase().includes(criteria.toLowerCase()),
+        )
+      : posts;
   return (
     <main>
       <h2>Posts</h2>
