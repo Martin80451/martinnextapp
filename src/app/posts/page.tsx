@@ -13,11 +13,13 @@ export default async function Posts({
           post.title.toLowerCase().includes(criteria.toLowerCase()),
         )
       : posts;
+  const resolvedHeading =
+    typeof criteria === "string" ? `Posts for ${criteria}` : "Posts";
   return (
     <main>
-      <h2>Posts</h2>
+      <h2>{resolvedHeading}</h2>
       <ul>
-        {posts.map((post) => (
+        {resolvedPosts.map((post) => (
           <li key={post.id}>
             <Link href={`/posts/${post.id}`}>{post.title}</Link>
             <p>{post.description}</p>
