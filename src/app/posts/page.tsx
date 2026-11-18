@@ -1,5 +1,5 @@
 import { posts } from "@/data/posts";
-import Link from "next/link";
+import { Link } from "react-router";
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 
@@ -49,7 +49,7 @@ async function PostsContent({ searchParams }: { searchParams: Props }) {
       <ul>
         {resolvedPosts.map((post) => (
           <li key={post.id}>
-            <Link href={`/posts/${post.id}`}>{post.title}</Link>
+            <Link to={`/posts/${post.id}`}>{post.title}</Link>
             <p>{post.description}</p>
           </li>
         ))}
