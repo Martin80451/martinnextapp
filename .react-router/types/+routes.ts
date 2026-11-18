@@ -14,7 +14,7 @@ type Pages = {
   "/": {
     params: {};
   };
-  "/notfound": {
+  "/posts": {
     params: {};
   };
 };
@@ -22,15 +22,15 @@ type Pages = {
 type RouteFiles = {
   "root.tsx": {
     id: "root";
-    page: "/" | "/notfound";
+    page: "/" | "/posts";
   };
-  "routes/notfound.tsx": {
-    id: "routes/notfound";
-    page: "/notfound";
+  "routes/posts._index.tsx": {
+    id: "routes/posts._index";
+    page: "/posts";
   };
 };
 
 type RouteModules = {
   "root": typeof import("./app/root.tsx");
-  "routes/notfound": typeof import("./app/routes/notfound.tsx");
+  "routes/posts._index": typeof import("./app/routes/posts._index.tsx");
 };
