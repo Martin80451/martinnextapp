@@ -1,8 +1,15 @@
 import { posts } from "@/data/posts";
 import Link from "next/link";
 import { Suspense } from "react";
+import { notFound } from "next/navigation";
 
 type Props = Promise<{ [key: string]: string | string[] | undefined }>;
+
+type Post = {
+  id: number;
+  title: string;
+  description: string;
+};
 
 export default async function Posts({ searchParams }: { searchParams: Props }) {
   return (
@@ -16,12 +23,24 @@ export default async function Posts({ searchParams }: { searchParams: Props }) {
 
 async function PostsContent({ searchParams }: { searchParams: Props }) {
   const criteria = (await searchParams).criteria;
-  const resolvedPosts =
-    typeof criteria === "string"
-      ? posts.filter((post) =>
-          post.title.toLowerCase().includes(criteria.toLowerCase()),
-        )
-      : posts;
+  let resolvedPosts: Post | Post[] | undefined;
+  if (typeof criteria === "string") {
+    resolvedPosts =
+      posts.filter((post) =>
+        post.title.toLowerCase().includes(criteria.toLowerCase()),
+      ) ?? notFound();
+  } else if (isStringArray(criteria)) {
+    resolvedPosts =
+      posts.filter((post) =>
+        criteria.every((c) =>
+          post.title.toLowerCase().includes(c.toLowerCase()),
+        ),
+      ) ?? notFound();
+  } else {
+    resolvedPosts = posts ?? notFound();
+  }
+
+  console.log("resolvedPosts", resolvedPosts);
   const resolvedHeading =
     typeof criteria === "string" ? `Posts for ${criteria}` : "Posts";
   return (
@@ -36,5 +55,11 @@ async function PostsContent({ searchParams }: { searchParams: Props }) {
         ))}
       </ul>
     </>
+  );
+}
+
+function isStringArray(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === "string")
   );
 }
