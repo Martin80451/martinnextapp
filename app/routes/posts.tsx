@@ -1,7 +1,7 @@
-import { posts } from "@/data/posts";
+import { posts } from "../../server/posts";
 import { Link } from "react-router";
+import ErrorBoundary from "@/routes/notfound";
 import { Suspense } from "react";
-import { notFound } from "next/navigation";
 
 type Props = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -28,16 +28,16 @@ async function PostsContent({ searchParams }: { searchParams: Props }) {
     resolvedPosts =
       posts.filter((post) =>
         post.title.toLowerCase().includes(criteria.toLowerCase()),
-      ) ?? notFound();
+      ) ?? ErrorBoundary();
   } else if (isStringArray(criteria)) {
     resolvedPosts =
       posts.filter((post) =>
         criteria.every((c) =>
           post.title.toLowerCase().includes(c.toLowerCase()),
         ),
-      ) ?? notFound();
+      ) ?? ErrorBoundary();
   } else {
-    resolvedPosts = posts ?? notFound();
+    resolvedPosts = posts ?? ErrorBoundary();
   }
 
   console.log("resolvedPosts", resolvedPosts);

@@ -1,17 +1,17 @@
 "use client";
 
 import { Link } from "react-router";
-import { usePathname } from "next/navigation";
-import Form from "next/form";
+import { useLocation } from "react-router";
+import { Form } from "react-router";
 
 export function Header() {
-  const pathName = usePathname();
+  const { pathname } = useLocation();
   return (
     <header>
-      <Link className={pathName === "/" ? "active" : ""} to="/">
+      <Link className={pathname === "/" ? "active" : ""} to="/">
         Home
       </Link>
-      <Link className={pathName === "/posts" ? "active" : ""} to="/posts">
+      <Link className={pathname === "/posts" ? "active" : ""} to="/posts">
         Posts
       </Link>
       <Form action="/posts">

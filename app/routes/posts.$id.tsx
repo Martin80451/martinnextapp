@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
-import { getPost } from "@/data/queries";
+import { getPost } from "../../server/queries";
+import ErrorBoundary from "@/routes/notfound";
 
 export default async function Post({
   params,
@@ -8,17 +8,17 @@ export default async function Post({
 }) {
   const id = Number((await params).id);
   if (!Number.isInteger(id)) {
-    notFound();
+    ErrorBoundary();
   }
   const post = await getPost(id);
   if (!post) {
-    notFound();
+    ErrorBoundary();
   }
 
   return (
     <main>
-      <h1>{post.title}</h1>
-      <p>{post.description}</p>
+      <h1>{post?.title}</h1>
+      <p>{post?.description}</p>
     </main>
   );
 }
