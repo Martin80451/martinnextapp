@@ -1,18 +1,28 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import {
+  Scripts,
+  ScrollRestoration,
+  type MetaFunction,
+  Outlet,
+} from "react-router";
 import { Header } from "@/components/Header";
-import { Suspense, type ReactNode } from "react";
+import { type ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/react-router/v8";
+
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
-export const metadata: Metadata = {
-  title: "The Posts App",
-  description: "Next.js app for blog posts.",
+export const metadata: MetaFunction = () => {
+  return [
+    { title: "The Posts App" },
+    { name: "description", content: "Next.js app for blog posts." },
+  ];
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export function Layout({ children }: { children: ReactNode }) {
   console.log("Am I on the server or client?");
   return (
     <html
@@ -20,11 +30,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       className={cn("h-full", "antialiased", "font-sans", geist.variable)}
     >
       <body className="min-h-full flex flex-col">
-        <Suspense fallback={<p>Loading...</p>}>
+        <NuqsAdapter>
           <Header />
           {children}
-        </Suspense>
+          <Toaster />
+        </NuqsAdapter>
+        <ScrollRestoration />
+        <Scripts />
       </body>
     </html>
   );
+}
+
+export default function Root() {
+  return <Outlet />;
 }
