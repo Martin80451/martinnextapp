@@ -1,6 +1,7 @@
-import { posts } from "@/data/posts";
+// import { posts } from "@/data/posts";
 import Link from "next/link";
 import { Suspense } from "react";
+import { getAllPosts, getFilteredPosts } from "@/data/queries";
 
 type Props = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -18,10 +19,8 @@ async function PostsContent({ searchParams }: { searchParams: Props }) {
   const criteria = (await searchParams).criteria;
   const resolvedPosts =
     typeof criteria === "string"
-      ? posts.filter((post) =>
-          post.title.toLowerCase().includes(criteria.toLowerCase()),
-        )
-      : posts;
+      ? await getFilteredPosts(criteria)
+      : await getAllPosts()
   const resolvedHeading =
     typeof criteria === "string" ? `Posts for ${criteria}` : "Posts";
   return (
