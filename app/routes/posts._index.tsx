@@ -1,20 +1,13 @@
 import { posts } from "../../server/posts";
-import {
-  Link,
-  type LoaderFunctionArgs,
-  useLoaderData,
-} from "react-router";
+import { Link, type LoaderFunctionArgs, useLoaderData } from "react-router";
+import { getAllPosts, getFilteredPosts } from "@/../server/queries";
 
-export function loader({ request }: LoaderFunctionArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const criteria = new URL(request.url).searchParams.getAll("criteria");
   const resolvedPosts =
     criteria.length === 0
-      ? posts
-      : posts.filter((post) =>
-          criteria.every((criterion) =>
-            post.title.toLowerCase().includes(criterion.toLowerCase()),
-          ),
-        );
+      ? await getAllPosts()
+      : await getFilteredPosts(criteria)
 
   return {
     resolvedPosts,

@@ -15,13 +15,14 @@ export async function getAllPosts() {
   return data.rows as unknown as Post[];
 }
 
-export async function getFilteredPosts(criteria: string) {
+export async function getFilteredPosts(criteria: string[]) {
   const client = createClient({
     url: process.env.DB_URL ?? "",
   });
+  const [...criterion] = criteria;
   const data = await client.execute({
     sql: "SELECT id, title, description FROM posts WHERE title LIKE ?",
-    args: [`%${criteria}%`],
+    args: [`%${criterion}%`],
   });
   client.close();
   return data.rows as unknown as Post[];
@@ -35,6 +36,7 @@ export async function getPost(id: number) {
     sql: "SELECT id, title, description FROM posts WHERE id = ?",
     args: [id],
   });
+  console.log("Data: ", data);
   client.close();
   if (data.rows.length === 0) {
     return undefined;
