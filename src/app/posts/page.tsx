@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import { Loading } from "@/components/Loading";
 import { PostList } from "@/components/PostList";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 type Props = Promise<{ [key: string]: string | string[] | undefined }>;
 
 export default async function Posts({ searchParams }: { searchParams: Props }) {
   return (
     <main>
-      <Suspense fallback={<p>Loading...</p>}>
+      <Suspense fallback={<Loading />}>
         <PostsContent searchParams={searchParams} />
       </Suspense>
     </main>
@@ -19,11 +20,13 @@ async function PostsContent({ searchParams }: { searchParams: Props }) {
   const resolvedHeading =
     typeof criteria === "string" ? `Posts for ${criteria}` : "Posts";
   return (
-    <>
+    <main>
       <h2>{resolvedHeading}</h2>
       <Suspense fallback={<Loading />}>
-        <PostList criteria={criteria} />
+        <ErrorBoundary>
+          <PostList criteria={criteria} />
+        </ErrorBoundary>
       </Suspense>
-    </>
+    </main>
   );
 }

@@ -1,47 +1,47 @@
 import { createClient } from "@libsql/client";
 
 type Post = {
-    id: number;
-    title: string;
-    description: string;
+  id: number;
+  title: string;
+  description: string;
 };
 
+// async function delay() {
+//   await new Promise((resolve) => setTimeout(resolve, 3000));
+// }
+
 export async function getAllPosts() {
-    const client = createClient({
-        url: process.env.DB_URL ?? "",
-    });
-    const data = await client.execute(
-        'SELECT id, title, description FROM posts',
-    );
-    client.close();
-    return data.rows as unknown as Post[];
+  const client = createClient({
+    url: process.env.DB_URL ?? "",
+  });
+  const data = await client.execute("SELECT id, title, description FROM posts");
+  client.close();
+  return data.rows as unknown as Post[];
 }
 
-export async function getFilteredPosts(
-    criteria: string,
-) {
-    const client = createClient({
-          url: process.env.DB_URL ?? "",
-    });
-    const data = await client.execute({
-        sql: 'SELECT id, title, description FROM posts WHERE title LIKE ?',
-        args: [`%${criteria}%`],
-    });
-    client.close();
-    return data.rows as unknown as Post[];
+export async function getFilteredPosts(criteria: string) {
+  const client = createClient({
+    url: process.env.DB_URL ?? "",
+  });
+  const data = await client.execute({
+    sql: "SELECT id, title, description FROM posts WHERE title LIKE ?",
+    args: [`%${criteria}%`],
+  });
+  client.close();
+  return data.rows as unknown as Post[];
 }
 
 export async function getPost(id: number) {
-    const client = createClient({
-          url: process.env.DB_URL ?? "",
-    });
-    const data = await client.execute({
-        sql: 'SELECT id, title, description FROM posts WHERE id = ?',
-        args: [id],
-    });
-    client.close();
-    if (data.rows.length === 0) {
-        return undefined;
-    }
-    return data.rows[0] as unknown as Post;
+  const client = createClient({
+    url: process.env.DB_URL ?? "",
+  });
+  const data = await client.execute({
+    sql: "SELECT id, title, description FROM posts WHERE id = ?",
+    args: [id],
+  });
+  client.close();
+  if (data.rows.length === 0) {
+    return undefined;
+  }
+  return data.rows[0] as unknown as Post;
 }
