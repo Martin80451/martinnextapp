@@ -5,6 +5,7 @@ import Link from "next/link";
 
 import { ErrorAlert } from "./ErrorAlert";
 import { Loading } from "./Loading";
+import { postsSchema } from "@/data/schema";
 
 export function PostList({
   criteria,
@@ -26,7 +27,7 @@ export function PostList({
       if (!response.ok) {
         throw new Error("Problem fetching data");
       }
-      return await response.json();
+      return postsSchema.parse(await response.json());
     },
   });
 

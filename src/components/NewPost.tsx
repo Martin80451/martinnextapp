@@ -1,28 +1,34 @@
 "use client";
 
-import { useState } from "react";
 import { createPost } from "@/data/createPost";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function NewPost() {
-  const [isMutating, setIsMutating] = useState(false);
-  const [status, setStatus] = useState<"pending" | "error" | "success">(
-    "pending",
-  );
-  async function handleClick() {
-    setIsMutating(true);
-    const result = await createPost("New Post", "New Post Description");
-    setStatus(result.ok ? "success" : "error");
-    setIsMutating(false);
+  const queryClient = useQueryClient();
+  const { mutate, isPending, isError, isSuccess } = useMutation({
+    mutationFn: ({
+      title,
+      description,
+    }: {
+      title: string;
+      description: string;
+    }) => createPost(title, description),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
+    },
+  });
+  function handleClick() {
+    mutate({ title: "New Title", description: "New Description" });
   }
   return (
     <div className="actions">
       <button type="button" onClick={handleClick}>
-        {isMutating ? "Creating..." : "Create New Post"}
+        {isPending ? "Creating..." : "Create New Post"}
       </button>
-      {status === "error" && (
-        <span role="alert">An unexpected error occurred</span>
-      )}
-      {status === "success" && (
+      {isError && <span role="alert">An unexpected error occurred</span>}
+      {isSuccess && (
         <span role="alert" className="success">
           Post successfully created
         </span>

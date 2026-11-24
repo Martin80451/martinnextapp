@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ErrorAlert } from "./ErrorAlert";
 import { Loading } from "./Loading";
 import { notFound } from "next/navigation";
+import { postSchema } from "@/data/schema";
 
 export default function PostDetail({ id }: { id: number }) {
   const {
@@ -21,7 +22,7 @@ export default function PostDetail({ id }: { id: number }) {
             : "Problem fetching data",
         );
       }
-      return await response.json();
+      return postSchema.parse(await response.json());
     },
   });
 
