@@ -1,8 +1,30 @@
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { ErrorAlert } from "./ErrorAlert";
+import { Loading } from "./Loading";
 import { notFound } from "next/navigation";
 import { getPost } from "@/data/queries";
 
-export default async function PostDetail({ id }: { id: number }) {
-  const post = await getPost(id);
+export default function PostDetail({ id }: { id: number }) {
+  const {
+    data: post,
+    error,
+    isPending,
+  } = useQuery({
+    queryKey: ["post", id],
+    queryFn: () => {
+      return getPost(id);
+    },
+  });
+
+  if (isPending) {
+    return <Loading />;
+  }
+  if (error) {
+    return <ErrorAlert error={error} />;
+  }
+
   if (!post) {
     notFound();
   }
