@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { Loading } from "@/components/Loading";
 import { PostList } from "@/components/PostList";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { NewPost } from "@/components/NewPost";
 
 type Props = Promise<{ [key: string]: string | string[] | undefined }>;
 
@@ -22,6 +23,7 @@ async function PostsContent({ searchParams }: { searchParams: Props }) {
   return (
     <main>
       <h2>{resolvedHeading}</h2>
+      <NewPost />
       <Suspense fallback={<Loading />}>
         <ErrorBoundary>
           <PostList criteria={criteria} />
