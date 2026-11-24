@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ErrorAlert } from "./ErrorAlert";
 import { Loading } from "./Loading";
 import { notFound } from "next/navigation";
-import { getPost } from "@/data/queries";
 
 export default function PostDetail({ id }: { id: number }) {
   const {
@@ -13,8 +12,16 @@ export default function PostDetail({ id }: { id: number }) {
     isPending,
   } = useQuery({
     queryKey: ["post", id],
-    queryFn: () => {
-      return getPost(id);
+    queryFn: async () => {
+      const response = await fetch(`/api/posts/${id}`);
+      if (!response.ok) {
+        throw new Error(
+          response.status === 404
+            ? "Blog post not found"
+            : "Problem fetching data",
+        );
+      }
+      return await response.json();
     },
   });
 

@@ -2,7 +2,6 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import { getFilteredPosts, getAllPosts } from "@/data/queries";
 
 import { ErrorAlert } from "./ErrorAlert";
 import { Loading } from "./Loading";
@@ -18,11 +17,16 @@ export function PostList({
     error,
   } = useQuery({
     queryKey: ["posts", criteria],
-    queryFn: () => {
-      if (typeof criteria === "string") {
-        return getFilteredPosts(criteria);
+    queryFn: async () => {
+      const path =
+        typeof criteria === "string"
+          ? `/api/posts/?criteria=${encodeURIComponent(criteria)}`
+          : "/api/posts/";
+      const response = await fetch(path);
+      if (!response.ok) {
+        throw new Error("Problem fetching data");
       }
-      return getAllPosts();
+      return await response.json();
     },
   });
 
