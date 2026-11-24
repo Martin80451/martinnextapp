@@ -53,5 +53,12 @@ export async function getPost(id: number) {
   if (data.rows.length === 0) {
     return undefined;
   }
-  return data.rows[0] as unknown as Post;
+
+  const firstRow = data.rows.map((row) => ({
+    id: Number(row.id),
+    title: String(row.title),
+    description: String(row.description),
+  }))[0];
+
+  return firstRow as unknown as Post;
 }
