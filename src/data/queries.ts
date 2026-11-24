@@ -18,7 +18,11 @@ export async function getAllPosts() {
   });
   const data = await client.execute("SELECT id, title, description FROM posts");
   client.close();
-  return data.rows as unknown as Post[];
+  return data.rows.map((row) => ({
+    id: Number(row.id),
+    title: String(row.title),
+    description: String(row.description),
+  }));
 }
 
 export async function getFilteredPosts(criteria: string) {
@@ -30,7 +34,11 @@ export async function getFilteredPosts(criteria: string) {
     args: [`%${criteria}%`],
   });
   client.close();
-  return data.rows as unknown as Post[];
+  return data.rows.map((row) => ({
+    id: Number(row.id),
+    title: String(row.title),
+    description: String(row.description),
+  }));
 }
 
 export async function getPost(id: number) {

@@ -1,4 +1,6 @@
 import { PostList } from "@/components/PostList";
+import { Suspense } from "react";
+import { Loading } from "@/components/Loading";
 import { NewPost } from "@/components/NewPost";
 
 type Props = Promise<{ [key: string]: string | string[] | undefined }>;
@@ -6,7 +8,9 @@ type Props = Promise<{ [key: string]: string | string[] | undefined }>;
 export default async function Posts({ searchParams }: { searchParams: Props }) {
   return (
     <main>
-      <PostsContent searchParams={searchParams} />
+      <Suspense fallback={<Loading />}>
+        <PostsContent searchParams={searchParams} />
+      </Suspense>
     </main>
   );
 }
